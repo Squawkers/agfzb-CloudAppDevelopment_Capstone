@@ -15,7 +15,7 @@ urlpatterns = [
     path(route='about', view=views.about, name='about'),
 
     # path for contact us view
-    path(route='contact', view=views.contact, name='contact'),
+    path(route='contact', view=views.contact, name='contact')path(route='contact', view=views.contact, name='contact'),
 
     # path for registration
     path(route='registration', view=views.registration_request, name='registration'),
@@ -27,7 +27,9 @@ urlpatterns = [
     path(route='logout', view=views.logout_request, name='logout'),
 
     # path for dealer reviews view
+    path(route='api/dealership/<int:dealer_id>/', view=views.get_dealer_details, name='dealer_details'),
 
     # path for add a review view
+    path(route='api/review/<int:dealer_id>/', view=view.add_review, name='add_review'),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)/
