@@ -10,8 +10,9 @@ from django.utils.timezone import now
 # - Any other fields you would like to include in car make model
 # - __str__ method to print a car make object
 class CarMake(models.Model):
-    name = models.CharField(null=False, max_lenght=1000)
-    description = models.Textfield()
+    name = models.CharField(null=False, max_length=30)
+    description = models.CharField(null=False, max_length=500)
+
     def __str__(self):
         return "Name" + self.name + ", " + \
                 "Description: " + self.description
@@ -32,42 +33,62 @@ class CarModel(models.Model):
     HATSCHBACK = 'Hatchback'
 
     CAR_CHOICES = [
-        (SEDAN = 'Sedan'),
-        (SUV = 'SUV'),
-        (WAGON = 'Wagon'),
-        (HATSCHBACK = 'Hatchback'),
         (SEDAN, 'Sedan'),
+        (SUV, 'SUV'),
+        (WAGON, 'Wagon'),
+        (HATSCHBACK, 'Hatchback'),
     ]
     
-    carmake = model.ForeignKey(CarMake, on_delete=model.CASCADE)
-    name = model.CharField(null=False,max_lenght=1000)
-    dealer_id = models.InteggerField()
-    car_type = model.CharField(max_lenght=1, choices=CAR_CHOICES, default=SEDAN)
-    year = models.DataField()
+    carmake = models.ForeignKey(CarMake, null=True, on_delete=models.CASCADE)
+    name = models.CharField(null=False,max_length=100)
+    dealer_id = models.IntegerField()
+    car_type = models.CharField(
+        max_length=20, 
+        null=False, 
+        choices=CAR_CHOICES,
+        default=SEDAN
+    )
+    year = models.DateField(null=True)
+
     def __str__(self):
-        return "Name: " + self.name + ", " + "Car Type: " +  self.car_type ", " + "Year: " + str(self.year)
+        return "Name: " + self.name + "Car Type: " +  self.car_type + "Year: " + str(self.year)
+
+        
 
 
 # <HINT> Create a plain Python class `CarDealer` to hold dealer data
 class CarDealer:
-    def __init__(self, id, full_name, short_name, city, state, st, address, zip, lat, long):
-        self.id = id
-        self.full_name = full_name
-        self.short_name = short_name
-        self.city = city
-        self.state = state
+    address = models.CharField(max_length=300)
+    #sentiment = models.CharField(null=False, max_length=20, choices=SENTIMENT_CHOICE, default=NEUTRAL)
+
+    def __init__(self, address, city, full_name, id, lat, long, short_name, st, zip):
+        # Dealer address
         self.address = address
-        self.zip =zip
+        # Dealer city
+        self.city = city
+        # Dealer Full Name
+        self.full_name = full_name
+        # Dealer id
+        self.id = id
+        # Location lat
         self.lat = lat
+        # Location long
         self.long = long
+        # Dealer short name
+        self.short_name = short_name
+        # Dealer state
+        self.st = st
+        # Dealer zip
+        self.zip = zip
+
     def __str__(self):
-        return "Dealer: name: " + self.full_name
+        return "Dealer name: " + self.full_name
 
 
 # <HINT> Create a plain Python class `DealerReview` to hold review data
 
 class DealerReview:
-    def __init__(self, name, dealership, review, purchase, purchase_date, car_make, car_model, car_year)
+    def __init__(self, name, dealership, review, purchase, purchase_date, car_make, car_model, car_year):
         self.name = name
         self.dealership = dealership
         self.review = review
@@ -76,5 +97,6 @@ class DealerReview:
         self.car_make = review
         self.car_model = car_model
         self.car_year = car_year
+
     def __str__(self):
         return "Name:" + self.name
